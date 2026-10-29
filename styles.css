@@ -1,0 +1,237 @@
+/* Charity: water Brand Colors & Fonts
+
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
+- Pink:       #F16061
+
+Fonts:
+- Proxima Nova
+- Avenir
+
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px 0;
+    background: #f4f4f4;
+    color: #131313;
+    font-family: Avenir, "Proxima Nova", "Trebuchet MS", sans-serif;
+}
+
+button,
+.water-drop {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: min(800px, 95vw);
+}
+
+.game-header {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.brand-logo {
+    width: min(280px, 70vw);
+    height: auto;
+    margin-bottom: 12px;
+}
+
+.score-panel {
+    display: flex;
+    justify-content: space-between;  /* Space between score and button */
+    align-items: center;
+    width: 100%;
+    gap: 16px;
+    padding: 12px 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.timer {
+    flex: 0 1 auto;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#game-container {
+    width: 100%;
+    height: min(600px, 68vh);
+    min-height: 380px;
+    background: linear-gradient(180deg, #fff 0%, #eaf8ff 32%, #8bd1cb 100%);
+    border: 3px solid #2e9df7;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+
+#start-btn {
+    min-height: 44px;
+    padding: 10px 18px;
+    background-color: #ffc907;
+    color: #131313;
+    border: 2px solid #131313;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#start-btn:hover:not(:disabled) {
+    background-color: #ffd43b;
+}
+
+#start-btn:disabled {
+    cursor: default;
+    opacity: 0.72;
+}
+
+.score {
+    flex: 0 1 auto;  /* Don't grow, can shrink, auto basis */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.water-drop {
+    position: absolute;
+    width: 60px;  /* increased from 40px */
+    height: 60px; /* increased from 40px */
+    background: radial-gradient(circle at 35% 30%, #fff 0 8%, #8bd1cb 9%, #2e9df7 62%, #159a48 100%);
+    border: 2px solid #159a48;
+    border-radius: 50%;
+    animation: dropFall linear forwards;
+    transform-origin: center;
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+    padding: 15px;  /* Add padding for larger click area */
+    margin: -15px;  /* Offset padding to maintain visual size */
+    transition: transform 0.1s ease;  /* Smooth hover effect */
+}
+
+.water-drop:hover {
+    transform: scale(1.1);  /* Slight grow effect on hover */
+}
+
+.bad-drop {
+    background: radial-gradient(circle at 35% 30%, #fff 0 8%, #ff902a 9%, #f5402c 65%);
+    border: 2px solid #131313;
+}
+
+.game-title {
+    color: #131313;
+    font-size: 48px;
+    margin-top: 0;
+    margin-bottom: 5px;  /* reduced from 20px */
+    text-align: center;
+}
+
+.game-tagline {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@keyframes dropFall {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(var(--fall-distance));
+    }
+}
+
+.game-result {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: min(500px, calc(100% - 32px));
+    transform: translate(-50%, -50%);
+    padding: 32px 24px;
+    background: #fff;
+    border: 3px solid #ffc907;
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(19, 19, 19, 0.18);
+    text-align: center;
+}
+
+.game-result[hidden] {
+    display: none;
+}
+
+#result-message {
+    margin-bottom: 12px;
+    font-size: clamp(20px, 5vw, 30px);
+    font-weight: 700;
+}
+
+#result-score {
+    color: #159a48;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+@media (max-width: 600px) {
+    body {
+        align-items: flex-start;
+        padding: 16px 0;
+    }
+
+    .game-wrapper {
+        gap: 12px;
+    }
+
+    .game-title {
+        font-size: 36px;
+    }
+
+    .game-tagline {
+        margin-bottom: 8px;
+    }
+
+    .score-panel {
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .score,
+    .timer {
+        font-size: 18px;
+    }
+
+    #start-btn {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
+    #game-container {
+        min-height: 440px;
+        height: 62vh;
+    }
+}
