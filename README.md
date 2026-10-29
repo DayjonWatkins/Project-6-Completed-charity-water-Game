@@ -1,46 +1,40 @@
-# charity: water – Water Drop Game Starter
-In this game, users collect as many falling water drops as possible. Users tap to collect drops before they hit the ground. You’ll be working from a partially built version of the game. Some functionality is already provided, and your job is to complete the rest.
+# charity: water – Water Drop Game (React Rewrite)
 
-## What’s Already Done
+An interactive React web game inspired by charity: water's mission to bring clean and safe drinking water to every person on the planet.
 
-The starter files already include:
+## Overview
 
-- A **heading and tagline**
-- A **start button**
-- A **game container** where water drops appear
-- A **placeholder timer and score** (not functional yet)
-- A **logo image** from charity: water
-- Working code that:
-  - Starts the game when the start button is clicked
-  - Makes water drops fall randomly at different sizes
+In this fast-paced game, players collect as many falling clean water drops as possible within a 30-second time limit while avoiding contaminated drops.
 
-## What You Need to Add
+- **Clean Water Drops (+1 pt):** Catch falling blue drops to provide clean water.
+- **Contaminated Drops (-1 pt):** Avoid muddy drops that decrease your score.
+- **Winning Condition:** Score 20 or more points within 30 seconds to earn a victory message and celebration!
+- **Sound Effects:** Built-in Web Audio API synthesizers for water droplets, collection ripples, and win/lose fanfares with toggle control.
+- **Accessibility:** Full keyboard control (Tab to focus, Space/Enter to collect) and touch/pointer support.
+- **Personal Best:** Tracks and saves high scores locally.
 
-Here’s what you're required to implement to bring the game to life:
+## Tech Stack
 
-### Game Functionality
+- **Framework:** React 19 + TypeScript
+- **Bundler:** Vite
+- **Styling:** Tailwind CSS + charity: water Brand Color Palette
+  - Yellow: `#FFC907`
+  - Blue: `#2E9DF7`
+  - Light Blue: `#8BD1CB`
+  - Green: `#4FCB53`
+  - Dark Green: `#159A48`
+  - Orange: `#FF902A`
+  - Red: `#F5402C`
+- **Effects:** Web Audio API sound synthesizers & canvas-confetti
 
-- **Update the score**
-  - +1 point for each drop clicked  
+## Development
 
-- **Add a 30-second timer**
-  - When the timer reaches 0, the game ends  
+```bash
+npm install
+npm run dev
+```
 
-- **Display a message when the game ends**
-  - If the player scores **20 or more points**, show a **winning** message  
-  - If the player scores **less than 20 points**, show a **"try again"** message  
-  - Create one array of possible winning messages and one array of losing messages
-  - Depending on whether the user wins or loses, randomly pick and display a message from the appropriate array
-
-### Visual Styling
-
-- **Add charity: water branding**
-  
-  - Use the provided logo  
-  - Use the [charity: water brand guidelines](https://drive.google.com/file/d/1ct4zYRIwHAtxoNQoeaVwWYPdnruSC6sr/view) to stay on-brand with colors and styling
-  - Add styling rules to ensure your game layout adjusts well across different screen sizes
-
-
-These are the minimum requirements, but if you'd like an additional challenge go ahead and give the LevelUps a shot! For example, you can set up logic to make some of the drops "bad" drops that remove points if the user click them, complete with a different color to distinguish them from "good" drops. Have fun and make the game your own!
-
-If you have any questions or need any assistance with your code, reach out to the HelpHub or attend a Drop-In Hour. You got this!!
+Build for production:
+```bash
+npm run build
+```

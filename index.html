@@ -1,32 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Drop Game</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="game-wrapper">
-        <header class="game-header">
-            <img src="img/cw_logo-horizontal.png" alt="charity: water" class="brand-logo">
-            <h1 class="game-title">Water Drop</h1>
-            <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
-        </header>
-        <div class="score-panel">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="timer">Time: <span id="time">30</span>s</div>
-            <button id="start-btn" type="button">Start Game</button>
-        </div>
-
-        <div id="game-container">
-            <div id="game-result" class="game-result" role="status" aria-live="polite" hidden>
-                <p id="result-message"></p>
-                <p id="result-score"></p>
-            </div>
-        </div>
-    </div>
-    
-    <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charity Water Drop Game</title>
+    <meta name="description" content="An interactive charity: water game where players catch clean water drops and avoid contaminated drops to support clean water initiatives." />
+    <meta property="og:title" content="Charity Water Drop Game" />
+    <meta property="og:description" content="An interactive charity: water game where players catch clean water drops and avoid contaminated drops to support clean water initiatives." />
+    <link rel="icon" type="image/png" href="/img/cw_logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#f4f4f4] text-[#131313] min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
