@@ -16,6 +16,8 @@ import {
   playLoseSound,
 } from './utils/audio';
 
+import { safeStorage } from './utils/storage';
+
 const WINNING_MESSAGES = [
   'You made a splash! Every drop counts.',
   'Brilliant catch! Clean water for communities.',
@@ -30,12 +32,8 @@ const LOSING_MESSAGES_TEMPLATES = [
 
 export const App: React.FC = () => {
   const [difficulty, setDifficulty] = useState<DifficultyLevel>(() => {
-    try {
-      const saved = localStorage.getItem('cw_difficulty') as DifficultyLevel;
-      if (saved && DIFFICULTY_CONFIGS[saved]) return saved;
-    } catch {
-      // ignore
-    }
+    const saved = safeStorage.getItem('cw_difficulty') as DifficultyLevel;
+    if (saved && DIFFICULTY_CONFIGS[saved]) return saved;
     return 'normal';
   });
 
@@ -51,18 +49,14 @@ export const App: React.FC = () => {
   // Track high score per difficulty
   const [highScores, setHighScores] = useState<Record<DifficultyLevel, number>>(() => {
     const scores: Record<DifficultyLevel, number> = { easy: 0, normal: 0, hard: 0 };
-    try {
-      (['easy', 'normal', 'hard'] as DifficultyLevel[]).forEach((diff) => {
-        const saved = localStorage.getItem(`cw_high_score_${diff}`);
-        if (saved) scores[diff] = parseInt(saved, 10) || 0;
-      });
-      // Fallback for legacy key
-      if (!scores.normal) {
-        const legacy = localStorage.getItem('cw_high_score');
-        if (legacy) scores.normal = parseInt(legacy, 10) || 0;
-      }
-    } catch {
-      // ignore storage errors
+    (['easy', 'normal', 'hard'] as DifficultyLevel[]).forEach((diff) => {
+      const saved = safeStorage.getItem(`cw_high_score_${diff}`);
+      if (saved) scores[diff] = parseInt(saved, 10) || 0;
+    });
+    // Fallback for legacy key
+    if (!scores.normal) {
+      const legacy = safeStorage.getItem('cw_high_score');
+      if (legacy) scores.normal = parseInt(legacy, 10) || 0;
     }
     return scores;
   });
@@ -71,12 +65,8 @@ export const App: React.FC = () => {
   const [resultMessage, setResultMessage] = useState<string>('');
   const [isWin, setIsWin] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem('cw_sound_enabled');
-      return saved !== null ? saved === 'true' : true;
-    } catch {
-      return true;
-    }
+    const saved = safeStorage.getItem('cw_sound_enabled');
+    return saved !== null ? saved === 'true' : true;
   });
   const [isRulesOpen, setIsRulesOpen] = useState<boolean>(false);
 
@@ -104,21 +94,13 @@ export const App: React.FC = () => {
     setTimeRemaining(DIFFICULTY_CONFIGS[newDiff].duration);
     setScore(0);
     scoreRef.current = 0;
-    try {
-      localStorage.setItem('cw_difficulty', newDiff);
-    } catch {
-      // ignore
-    }
+    safeStorage.setItem('cw_difficulty', newDiff);
   };
 
   const toggleSound = () => {
     setSoundEnabled((prev) => {
       const next = !prev;
-      try {
-        localStorage.setItem('cw_sound_enabled', String(next));
-      } catch {
-        // ignore storage errors
-      }
+      safeStorage.setItem('cw_sound_enabled', String(next));
       return next;
     });
   };
@@ -198,11 +180,7 @@ export const App: React.FC = () => {
     if (finalScore > currentBest) {
       setHighScores((prev) => {
         const updated = { ...prev, [currentDiff]: finalScore };
-        try {
-          localStorage.setItem(`cw_high_score_${currentDiff}`, String(finalScore));
-        } catch {
-          // ignore storage errors
-        }
+        safeStorage.setItem(`cw_high_score_${currentDiff}`, String(finalScore));
         return updated;
       });
       newRecord = true;
