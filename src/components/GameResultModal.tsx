@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import confetti from 'canvas-confetti';
+import React from 'react';
 import { Trophy, RefreshCw, Sparkles, Heart } from 'lucide-react';
 
 interface GameResultModalProps {
@@ -23,29 +22,42 @@ export const GameResultModal: React.FC<GameResultModalProps> = ({
   difficultyLabel,
   onPlayAgain,
 }) => {
-  useEffect(() => {
-    if (isWin) {
-      try {
-        confetti({
-          particleCount: 90,
-          spread: 75,
-          origin: { y: 0.6 },
-          colors: ['#ffc907', '#2e9df7', '#8bd1cb', '#4fcb53'],
-        });
-      } catch {
-        // Confetti fallback
-      }
-    }
-  }, [isWin]);
-
   return (
     <div
       id="game-result"
       role="status"
       aria-live="polite"
-      className="absolute inset-0 flex items-center justify-center p-4 bg-black/35 backdrop-blur-[2px] z-30 transition-all animate-in fade-in duration-300"
+      className="absolute inset-0 flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px] z-30 transition-all"
     >
-      <div className="w-[min(500px,calc(100%-32px))] p-6 sm:p-8 bg-white border-4 border-[#ffc907] rounded-xl shadow-2xl text-center transform transition-all">
+      {/* Decorative Celebration Confetti Particles */}
+      {isWin && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+          {Array.from({ length: 30 }).map((_, i) => {
+            const colors = ['#ffc907', '#2e9df7', '#8bd1cb', '#4fcb53', '#ff902a'];
+            const left = (i * 3.3) % 100;
+            const duration = 1.8 + ((i * 7) % 12) * 0.1;
+            const delay = ((i * 3) % 8) * 0.1;
+            const size = 6 + (i % 6) * 1.5;
+
+            return (
+              <span
+                key={i}
+                className="absolute top-0 rounded-xs animate-pulse"
+                style={{
+                  left: `${left}%`,
+                  width: `${size}px`,
+                  height: `${size * 1.2}px`,
+                  backgroundColor: colors[i % colors.length],
+                  animation: `dropFall ${duration}s ease-in ${delay}s infinite`,
+                  transform: `rotate(${i * 24}deg)`,
+                }}
+              />
+            );
+          })}
+        </div>
+      )}
+
+      <div className="relative w-[min(500px,calc(100%-32px))] p-6 sm:p-8 bg-white border-4 border-[#ffc907] rounded-xl shadow-2xl text-center transform transition-all z-20">
         {/* Jerry can icon / Celebration badge */}
         <div className="flex justify-center mb-4">
           <div className="relative">

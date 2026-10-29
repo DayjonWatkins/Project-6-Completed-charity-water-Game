@@ -37,7 +37,7 @@ export const App: React.FC = () => {
     return 'normal';
   });
 
-  const activeConfig = DIFFICULTY_CONFIGS[difficulty];
+  const activeConfig = DIFFICULTY_CONFIGS[difficulty] || DIFFICULTY_CONFIGS.normal;
 
   const [gameStatus, setGameStatus] = useState<GameStatus>('idle');
   const [score, setScore] = useState<number>(0);
