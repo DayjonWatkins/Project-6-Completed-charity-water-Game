@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, Droplets, Sparkles } from 'lucide-react';
+import { getAssetUrl } from '../utils/assets';
 
 interface HowToPlayModalProps {
   isOpen: boolean;
@@ -51,7 +52,7 @@ export const HowToPlayModal: React.FC<HowToPlayModalProps> = ({
           <div className="flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
             <div className="w-10 h-10 rounded-lg shrink-0 bg-white border-2 border-[#ffc907] flex items-center justify-center p-1 shadow-xs">
               <img
-                src="/img/water-can-transparent.png"
+                src={getAssetUrl('img/water-can-transparent.png')}
                 alt="Jerry Can"
                 className="w-full h-full object-contain"
               />

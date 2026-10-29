@@ -1,4 +1,5 @@
 import React from 'react';
+import { getAssetUrl } from '../utils/assets';
 
 interface HeaderProps {
   onOpenRules?: () => void;
@@ -9,7 +10,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenRules }) => {
     <header className="flex w-full flex-col items-center text-center">
       <div className="relative flex items-center justify-center w-full mb-3">
         <img
-          src="/img/cw_logo-horizontal.png"
+          src={getAssetUrl('img/cw_logo-horizontal.png')}
           alt="charity: water"
           className="w-[min(280px,70vw)] h-auto select-none"
           loading="eager"

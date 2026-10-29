@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { DropItem, ScorePopup, RippleEffect, GameStatus, DifficultyConfig } from '../types/game';
 import { Droplet, Play, Sparkles } from 'lucide-react';
+import { getAssetUrl } from '../utils/assets';
 
 interface GameContainerProps {
   gameStatus: GameStatus;
@@ -136,7 +137,7 @@ export const GameContainer: React.FC<GameContainerProps> = ({
             >
               <div className="relative w-full h-full flex items-center justify-center">
                 <img
-                  src="/img/water-can-transparent.png"
+                  src={getAssetUrl('img/water-can-transparent.png')}
                   alt="charity: water Jerry Can Bonus"
                   className="w-full h-full object-contain filter drop-shadow-md hover:brightness-110 pointer-events-none"
                   draggable={false}

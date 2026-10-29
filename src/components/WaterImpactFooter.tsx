@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExternalLink, ArrowUpRight, ShieldCheck } from 'lucide-react';
+import { getAssetUrl } from '../utils/assets';
 
 export const WaterImpactFooter: React.FC = () => {
   return (
@@ -8,7 +9,7 @@ export const WaterImpactFooter: React.FC = () => {
       <div className="bg-[#ffc907] px-4 py-3 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
         <div className="flex items-center gap-3">
           <img
-            src="/img/water-can-transparent.png"
+            src={getAssetUrl('img/water-can-transparent.png')}
             alt="charity: water jerry can"
             className="w-7 h-7 object-contain drop-shadow-xs"
           />

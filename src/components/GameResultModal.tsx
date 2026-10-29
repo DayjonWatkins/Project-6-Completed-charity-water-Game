@@ -1,5 +1,6 @@
 import React from 'react';
 import { Trophy, RefreshCw, Sparkles, Heart } from 'lucide-react';
+import { getAssetUrl } from '../utils/assets';
 
 interface GameResultModalProps {
   score: number;
@@ -62,7 +63,7 @@ export const GameResultModal: React.FC<GameResultModalProps> = ({
         <div className="flex justify-center mb-4">
           <div className="relative">
             <img
-              src="/img/water-can-transparent.png"
+              src={getAssetUrl('img/water-can-transparent.png')}
               alt="charity: water jerry can"
               className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md mx-auto"
               onError={(e) => {
