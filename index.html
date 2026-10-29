@@ -8,9 +8,278 @@
     <meta property="og:title" content="Charity Water Drop Game" />
     <meta property="og:description" content="An interactive charity: water game where players catch clean water drops and avoid contaminated drops to support clean water initiatives." />
     <link rel="icon" type="image/png" href="./img/cw_logo.png" />
+    <link rel="stylesheet" href="./style.css" />
   </head>
-  <body class="bg-[#f4f4f4] text-[#131313] min-h-screen">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body>
+    <div class="game-wrapper">
+      <!-- Header -->
+      <header class="game-header">
+        <div class="logo-container">
+          <img
+            src="./img/cw_logo-horizontal.png"
+            alt="charity: water"
+            class="cw-logo"
+            loading="eager"
+            onerror="this.style.display='none'"
+          />
+          <button id="open-rules-btn" type="button" class="how-to-play-btn" title="How to play instructions">
+            <span>How to Play</span>
+          </button>
+        </div>
+        <h1 class="game-title">Water Drop</h1>
+        <p class="game-subtitle">Catch the good drops, avoid the bad ones!</p>
+      </header>
+
+      <!-- Difficulty Selector -->
+      <section class="difficulty-selector" aria-label="Game Difficulty Mode">
+        <span class="difficulty-label">Mode</span>
+        <div class="difficulty-buttons" role="group" aria-label="Difficulty Mode">
+          <button type="button" class="diff-btn" data-diff="easy" aria-pressed="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4fcb53" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Easy</span>
+            <span class="diff-details">(15pts/40s)</span>
+          </button>
+          <button type="button" class="diff-btn active" data-diff="normal" aria-pressed="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2e9df7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Normal</span>
+            <span class="diff-details">(20pts/30s)</span>
+          </button>
+          <button type="button" class="diff-btn" data-diff="hard" aria-pressed="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f5402c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+            <span>Hard</span>
+            <span class="diff-details">(25pts/22s)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Score & Control Panel -->
+      <section class="score-panel" aria-label="Game Controls and Score">
+        <div class="score-display">
+          <div class="score-text">Score: <span id="score-value" class="score-number">0</span></div>
+          <div id="high-score-badge" class="high-score-badge" style="display: none;"></div>
+        </div>
+
+        <!-- Live Water Reservoir Widget -->
+        <div id="reservoir-widget" class="water-reservoir" title="Clean Water Reservoir - Fills as you collect drops!">
+          <div id="reservoir-tank" class="reservoir-tank">
+            <div id="reservoir-fill" class="reservoir-water-fill"></div>
+          </div>
+          <div class="reservoir-info">
+            <div class="reservoir-header">
+              <span class="reservoir-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#2e9df7" stroke="#2e9df7" stroke-width="1.5"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+                Clean Reservoir
+              </span>
+              <span id="reservoir-percent" class="reservoir-percent">0%</span>
+            </div>
+            <div class="reservoir-bar-track">
+              <div id="reservoir-bar" class="reservoir-bar-fill"></div>
+            </div>
+            <div class="reservoir-footer">
+              <span id="reservoir-count">0 / 20 drops</span>
+              <span id="reservoir-goal-badge" class="reservoir-goal-badge" style="display: none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="#ffc907" stroke="#b45309" stroke-width="1.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                Goal!
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls: Timer, Mute & Start -->
+        <div class="panel-controls">
+          <div id="timer-display" class="timer-display">Time: 30s</div>
+          <button id="sound-btn" type="button" class="sound-toggle-btn sound-on" title="Mute sound" aria-label="Mute sound"></button>
+          <button id="start-btn" type="button" class="primary-btn">Start Game</button>
+        </div>
+      </section>
+
+      <!-- Main Game Field -->
+      <main class="game-container-wrapper">
+        <div id="game-container" role="application" aria-label="Water Drop Game Field">
+          <!-- Ambient wave -->
+          <div class="ambient-water-wave"></div>
+
+          <!-- Goal indicator -->
+          <div id="goal-indicator" class="goal-badge"></div>
+
+          <!-- Idle Start Screen inside Container -->
+          <div id="idle-overlay" class="idle-overlay">
+            <div class="idle-droplet-badge">
+              <div class="idle-droplet-circle good-drop">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="#ffffff" stroke="#ffffff" stroke-width="1.5"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+              </div>
+              <div id="idle-mode-tag" class="idle-mode-tag">Normal Mode</div>
+            </div>
+            <h2 class="idle-title">Ready to Catch Clean Water?</h2>
+            <p id="idle-desc" class="idle-desc"></p>
+            <button id="idle-start-btn" type="button" class="primary-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Start Game
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <!-- Charity Water Impact Footer -->
+      <footer class="water-impact-footer">
+        <div class="footer-highlight-bar">
+          <div class="footer-highlight-left">
+            <img src="./img/water-can-transparent.png" alt="Jerry Can" class="footer-can-icon" />
+            <div>
+              <span class="footer-highlight-title">Clean Water Changes Everything</span>
+              <p class="footer-highlight-subtitle">703 million people lack basic access to clean, safe drinking water.</p>
+            </div>
+          </div>
+          <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener noreferrer" class="footer-donate-btn">
+            <span>Donate Clean Water</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffc907" stroke-width="2.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+        </div>
+
+        <div class="footer-body">
+          <div class="impact-cards-grid">
+            <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener noreferrer" class="impact-card">
+              <div class="impact-card-header">
+                <span class="impact-card-title">Make a Donation</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </div>
+              <p class="impact-card-desc">$40 can bring clean, lasting water to one person. 100% funds water projects.</p>
+            </a>
+
+            <a href="https://www.charitywater.org/the-spring" target="_blank" rel="noopener noreferrer" class="impact-card">
+              <div class="impact-card-header">
+                <span class="impact-card-title">Join The Spring</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </div>
+              <p class="impact-card-desc">Join a passionate global community giving clean water every single month.</p>
+            </a>
+
+            <a href="https://www.charitywater.org/our-work" target="_blank" rel="noopener noreferrer" class="impact-card">
+              <div class="impact-card-header">
+                <span class="impact-card-title">Our Impact & Proof</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </div>
+              <p class="impact-card-desc">Every project is mapped with GPS coordinates and photos from the field.</p>
+            </a>
+          </div>
+
+          <div class="footer-promise-row">
+            <div class="footer-promise-info">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#159a48" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+              <span><strong>The 100% Model:</strong> Private donors cover operational costs so 100% of public donations fund water projects.</span>
+            </div>
+            <a href="https://www.charitywater.org" target="_blank" rel="noopener noreferrer" class="footer-main-site-link">
+              <span>Visit charitywater.org</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Game Result Modal -->
+    <div id="result-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title">
+      <div id="confetti-container" class="confetti-container"></div>
+      <div class="modal-card">
+        <div class="result-badge-wrap">
+          <img src="./img/water-can-transparent.png" alt="Jerry Can" class="result-jerry-can" />
+          <div class="result-sparkle-tag">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          </div>
+        </div>
+
+        <h2 id="result-title" class="result-title">You made a splash!</h2>
+        <div id="result-score" class="result-score">Final score: 0</div>
+        <div id="result-meta" class="result-mode-meta">Mode: Normal (Goal: 20 drops)</div>
+        <div id="result-banner" class="high-score-announcement" style="display: none;"></div>
+
+        <div id="result-summary" class="result-summary-box"></div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+          <button id="play-again-btn" type="button" class="primary-btn" style="min-width: 180px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+            Play Again
+          </button>
+          <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener noreferrer" class="result-donate-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#f16061" stroke="#f16061"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            Turn your score into real impact at charitywater.org
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="rules-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="rules-dialog-title">
+      <div class="modal-card">
+        <button id="close-rules-btn" type="button" class="modal-close-btn" aria-label="Close instructions">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <h3 id="rules-dialog-title" class="font-heading" style="font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#2e9df7" stroke="#2e9df7"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+          How to Play & Game Elements
+        </h3>
+
+        <div class="rules-list">
+          <div class="rule-item blue">
+            <div class="rule-icon-box good-drop">+1</div>
+            <div>
+              <h4>Clean Water Drops</h4>
+              <p>Catch clean drops to add <strong>+1 point</strong> and fill the Clean Water Reservoir. Drops disappear immediately upon tapping.</p>
+            </div>
+          </div>
+
+          <div class="rule-item amber">
+            <div class="rule-icon-box" style="background: #ffffff; border: 2px solid var(--cw-yellow); padding: 4px;">
+              <img src="./img/water-can-transparent.png" alt="Jerry Can" style="width: 100%; height: 100%; object-fit: contain;" />
+            </div>
+            <div>
+              <h4 style="color: #92400e; display: flex; align-items: center; gap: 4px;">
+                <span>Jerry Can Bonus</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffc907" stroke="#d97706"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              </h4>
+              <p style="color: #78350f;">Catch the floating yellow jerry can for <strong>+3 bonus points</strong>! Disappears in a golden burst.</p>
+            </div>
+          </div>
+
+          <div class="rule-item red">
+            <div class="rule-icon-box bad-drop">-1</div>
+            <div>
+              <h4 style="color: var(--cw-red);">Contaminated Drops</h4>
+              <p>Avoid murky red/orange drops! Catching one subtracts <strong>-1 point</strong> from your reservoir.</p>
+            </div>
+          </div>
+
+          <div class="rule-item gray" style="flex-direction: column;">
+            <h4 style="text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; color: #475569;">Difficulty Modes</h4>
+            <div class="difficulty-table" style="width: 100%;">
+              <div class="diff-table-card">
+                <span class="diff-table-name" style="color: #159a48;">Easy</span>
+                <span class="diff-table-meta">15 drops · 40s</span>
+              </div>
+              <div class="diff-table-card">
+                <span class="diff-table-name" style="color: #2e9df7;">Normal</span>
+                <span class="diff-table-meta">20 drops · 30s</span>
+              </div>
+              <div class="diff-table-card">
+                <span class="diff-table-name" style="color: #f5402c;">Hard</span>
+                <span class="diff-table-meta">25 drops · 22s</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size: 12px; color: #64748b; padding-top: 4px;">
+            <strong>Accessibility:</strong> Click, tap, or use Tab to select falling drops and press Space or Enter to catch them.
+          </div>
+        </div>
+
+        <button id="rules-done-btn" type="button" class="primary-btn" style="width: 100%;">
+          Got It, Let's Play!
+        </button>
+      </div>
+    </div>
+
+    <!-- Pure Vanilla Script (No build or framework needed on GitHub Pages) -->
+    <script src="./script.js" defer></script>
   </body>
 </html>

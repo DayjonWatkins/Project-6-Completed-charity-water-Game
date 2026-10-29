@@ -1,6 +1,8 @@
-# charity: water – Water Drop Game (React)
+# charity: water – Water Drop Game
 
-An interactive React web game inspired by charity: water's mission to bring clean and safe drinking water to every person on the planet.
+An interactive, pure HTML, JavaScript, and CSS game inspired by charity: water's mission to bring clean and safe drinking water to every person on the planet.
+
+Built with **zero framework dependencies** so you can deploy directly from the `main` branch root (`/`) on GitHub Pages without using a `/docs` folder or requiring build steps.
 
 ## Features
 
@@ -12,7 +14,7 @@ An interactive React web game inspired by charity: water's mission to bring clea
   - **Clean Drops (+1 pt):** Catch falling blue drops to supply clean water.
   - **Yellow Jerry Can Bonus (+3 pts):** Catch falling charity: water jerry cans for high-value bonuses!
   - **Contaminated Drops (-1 pt):** Avoid murky drops that reduce your score.
-  - **Clean Water Reservoir:** Live DOM water tank that fills in real-time toward your community goal.
+  - **Clean Water Reservoir:** Live water gauge that fills in real-time toward your community goal.
   - **Audio & Haptic Feedback:** Web Audio API sound synthesizers for drops, splash ripples, and victory fanfare (with mute toggle).
   - **High Scores:** Saved locally per difficulty mode.
 - **charity: water Mission & Donation Section:**
@@ -21,43 +23,33 @@ An interactive React web game inspired by charity: water's mission to bring clea
 
 ---
 
-## Deploying on GitHub Pages (Recommended)
+## Deploying Directly from `main` on GitHub Pages (No `/docs` Needed!)
 
-This repository includes an automated GitHub Actions deployment workflow (`.github/workflows/deploy.yml`).
+Because the game is built with standard `index.html`, `style.css`, and `script.js` directly in the repository root:
 
-### Setup Instructions:
-1. Push this repository to GitHub.
-2. In your GitHub repository, click **Settings** (top menu).
-3. On the left sidebar, click **Pages** (under the "Code and automation" section).
-4. Under **Build and deployment** -> **Source**, choose **GitHub Actions** from the dropdown.
-5. Push any commit to `main` (or click **Actions** -> **Deploy to GitHub Pages** -> **Run workflow**).
-6. Your game will be live at:
+1. Push this repository to GitHub on branch `main`.
+2. Go to your repository on GitHub and open **Settings** (top navigation tab).
+3. In the left sidebar, click **Pages** (under the "Code and automation" section).
+4. Under **Build and deployment**:
+   - **Source**: Select **Deploy from a branch**.
+   - **Branch**: Select **`main`** and folder **`/ (root)`**.
+5. Click **Save**.
+6. GitHub Pages will publish your site immediately at:
    ```
    https://<your-username>.github.io/<repository-name>/
    ```
-
-Because Vite is configured with `base: './'`, all scripts, styles, and images load seamlessly on GitHub Pages repository subpaths without 404 errors.
-
----
-
-## Deploying to Vercel, Netlify, or Cloudflare Pages
-
-If you connect this repository to Vercel, Netlify, or Cloudflare Pages, use these default settings:
-- **Framework Preset:** Vite
-- **Build Command:** `npm run build`
-- **Output Directory:** `dist`
+   No `/docs` folder, no build commands, and no GitHub Actions required!
 
 ---
 
-## Local Development
+## Local Development (Optional)
+
+You can view the game locally by simply opening `index.html` in any web browser, or using the included dev server:
 
 ```bash
-# Install dependencies
-npm install
-
 # Start local dev server (port 3000)
 npm run dev
 
-# Build for production
-npm run build
+# Lint syntax check
+npm run lint
 ```
